@@ -1,0 +1,27 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components{
+    .Item {
+        @apply flex items-center gap-5 cursor-pointer py-[7.5px] px-0
+    }
+
+    .containerDarkTheme{
+        @apply bg-[#181818] text-white
+    }
+    .containerLightTheme{
+        @apply bg-white text-black
+    }
+    .menuDarkTheme{
+        @apply bg-[#202020] text-white
+    }
+
+    .menuLightTheme{
+        @apply bg-white text-black
+    }
+
+
+    
+
+}
