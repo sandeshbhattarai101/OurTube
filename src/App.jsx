@@ -6,6 +6,8 @@ Route } from "react-router-dom";
 import Menu from './components/Menu';
 import Navbar from './components/Navbar';
 import Home from './components/pages/Home';
+import Video from './components/pages/Video';
+import SignIn from './components/pages/SignIn';
 
 function App() {
 
@@ -21,8 +23,9 @@ function App() {
            <Routes>
             <Route path='/'>
               <Route index element={<Home/>} />
+              <Route path="signin" element={<SignIn/>} />
               <Route path='video'>
-                {/* <Route path=":id" element={<Video/>}/> */}
+                <Route path=":id" element={<Video/>}/>
               </Route>
             </Route>
            </Routes>

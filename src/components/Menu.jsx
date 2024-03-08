@@ -77,7 +77,9 @@ function Menu() {
 
         <div className="Login ">
           Sign in to like videos, comment, and subscribe.
+          <Link to="signin">
           <button className='flex items-center gap-[5px] py-[5px] px-[10px] mt-[10px] bg-transparent border-blue-600 border-[1px] border-solid text-blue-600 text-[xs] font-semibold rounded-[3px] '> <AccountCircleIcon fontSize='small' /> SIGN IN </button>
+          </Link>
         </div>
 
         <div className='Hr  my-[15px] mx-0 border-[0.5px] border-solid border-[#eeeeee] dark:border-[#373737]  '></div>

@@ -4,7 +4,7 @@
 
 @layer components{
     .Item {
-        @apply flex items-center gap-5 cursor-pointer py-[7.5px] px-0
+        @apply flex items-center gap-5 cursor-pointer py-[7.5px] px-0 hover:bg-[#c4c4c46d] dark:hover:bg-[#94949464]
     }
 
     .containerDarkTheme{
