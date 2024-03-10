@@ -14,7 +14,7 @@ export const signup = async(req, res, next)=>{
     await newUser.save();
     // using send or json is same 
     res.status(200).send("User has been created")
- } catch (error) {
+ } catch (err) {
     next(err);
  }
 }
@@ -35,11 +35,9 @@ export const signin = async(req, res, next)=>{
    const {password, ...others} = user._doc
 
    res.cookie("access_token", token,{
-      httpOnly:true
+      httpOnly:true,
    }).status(200).json(others);
-
-
- } catch (error) {
+ } catch (err) {
     next(err);
  }
 }
