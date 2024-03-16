@@ -6,6 +6,7 @@ import videoRoutes from "./routes/videos.js"
 import commentRoutes from "./routes/comments.js"
 import authRoutes from "./routes/auth.js"
 import cookieParser from "cookie-parser";
+import cors from "cors"
 
 const app  = express()
 dotenv.config()
@@ -19,6 +20,16 @@ const connect = async() =>{
     }) }
 };
 
+//For CORS
+
+const corsOptions = {
+    origin : "http://localhost:5173",
+    credentials: true, 
+  };
+  
+  app.use(cors(corsOptions));
+
+
 app.use(express.json())
 app.use(cookieParser())
 
@@ -26,6 +37,8 @@ app.use("/api/auth", authRoutes)
 app.use("/api/users", userRoutes)
 app.use("/api/videos", videoRoutes)
 app.use("/api/comments", commentRoutes)
+
+
 
 // MIDDLEWARE FOR ERROR HANDLING
 app.use((err, req, res, next)=>{

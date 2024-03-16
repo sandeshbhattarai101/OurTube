@@ -1,5 +1,6 @@
 import { createError } from "../error.js"
 import User from "../models/User.js"
+import Video from "../models/Video.js"
 
 export const updateUser = async (req, res, next)=>{
     if(req.params.id === req.user.id){
@@ -74,8 +75,30 @@ export const unsubscribe = async (req, res,next)=>{
     }
 }
 
-export const like = (req, res,next)=>{
+export const like = async (req, res,next)=>{
+    const id = req.user.id;
+    const videoId = req.params.videoId;
+    try {
+        await Video.findByIdAndUpdate(videoId,{
+            $addToSet:{likes:id},  // ensures that the content is added only once no duplicates unlike $push
+            $pull:{dislikes:id}                            
+        })
+        res.status(200).json("The video has been liked.")
+    } catch (err) {
+        next(err)
+    }
 }
 
-export const dislike = (req, res,next)=>{
+export const dislike = async (req, res,next)=>{
+    const id = req.user.id;
+    const videoId = req.params.videoId;
+    try {
+        await Video.findByIdAndUpdate(videoId,{
+            $addToSet:{dislikes:id},  // add id to dislike array but with no duplicates
+            $pull:{likes:id}      // removes id from likes array if video id liked previously                    
+        })
+        res.status(200).json("The video has been disliked.")
+    } catch (err) {
+        next(err)
+    }
 }

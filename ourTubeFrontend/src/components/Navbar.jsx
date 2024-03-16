@@ -1,9 +1,23 @@
 import React from 'react'
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import SearchIcon from '@mui/icons-material/Search';
+import VideoCallOutlinedIcon from '@mui/icons-material/VideoCallOutlined';
 import { Link } from 'react-router-dom';
+import {useSelector} from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { logout } from '../redux/userSlice';
+
 
 function Navbar() {
+
+ const dispatch = useDispatch();
+
+  const {currentUser} = useSelector((state) => state.user)
+
+  const handleLogOut = ()=>{
+    dispatch(logout());
+  }
+
   return (
     < >
     <div className="Container sticky top-0 bg-[#ffffff] dark:bg-[#202020] h-[56px] ">
@@ -12,9 +26,21 @@ function Navbar() {
           <input className=' w-[94%] outline-none bg-transparent' type="text" placeholder='Search'/>
           <SearchIcon/>
         </div>
-        <Link to="signin">
-        <button className='flex items-center gap-[5px] py-[5px] px-[10px]  bg-transparent border-blue-600 border-[1px] border-solid text-blue-600 text-[xs] font-semibold rounded-[3px] '> <AccountCircleIcon fontSize='small' /> SIGN IN </button>
+       {currentUser ? (
+        <>
+        <button onClick={handleLogOut} className="flex items-center gap-[5px] py-[5px] px-[10px] mr-10  bg-transparent border-blue-600 border-[1px] hover:border-blue-700 border-solid text-blue-600 hover:text-blue-700 text-[xs] font-semibold rounded-[3px] '> <AccountCircleIcon fontSize='small'">Logout</button>
+        <div className="User flex items-center gap-[10px] font-medium  ">
+          <VideoCallOutlinedIcon/>
+          <img src={currentUser.img} className="Avatar w-8 h-8 rounded-[50%] bg-[#999] "/>
+            {currentUser.name}
+        </div>
+
+        </>
+       ) : ( 
+       <Link to="signin">
+        <button className='flex items-center gap-[5px] py-[5px] px-[10px]  bg-transparent border-blue-600 hover:border-blue-700 border-[1px] border-solid text-blue-600 hover:text-blue-700 text-[xs] font-semibold rounded-[3px] '> <AccountCircleIcon fontSize='small' /> SIGN IN </button>
         </Link>
+        )}
       </div>
     </div>
     </>

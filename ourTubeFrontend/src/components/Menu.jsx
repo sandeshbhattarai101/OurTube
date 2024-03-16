@@ -16,6 +16,7 @@ import HelpIcon from '@mui/icons-material/Help';
 import LightModeIcon from '@mui/icons-material/LightMode';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 
 function Menu() {
@@ -36,6 +37,9 @@ function Menu() {
     setMode(mode === "Dark Mode" ? "Light Mode" : "Dark Mode")
   }
 
+  const {currentUser} = useSelector((state) => state.user)
+
+
 
   return (
     <div className='Container sticky top-0 flex-[1] bg-white dark:bg-[#202020] text-[black] dark:text-white h-[100vh] text-[14px] '>
@@ -51,15 +55,19 @@ function Menu() {
          Home 
         </div>
 
+        <Link to="trends">
         <div className="Item">
           <ExploreIcon/>
          Explore 
         </div>
+        </Link>
 
+        <Link to="subscriptions">
         <div className="Item">
           <SubscriptionsIcon/>
          Subscription 
         </div>
+        </Link>
 
         <div className='Hr  my-[15px] mx-0 border-[0.5px] border-solid border-[#eeeeee] dark:border-[#373737]  '></div>
 
@@ -75,15 +83,18 @@ function Menu() {
 
         <div className='Hr  my-[15px] mx-0 border-[0.5px] border-solid border-[#eeeeee] dark:border-[#373737]  '></div>
 
+    {!currentUser && 
+    <>
+        <Link to="signin">
         <div className="Login ">
           Sign in to like videos, comment, and subscribe.
-          <Link to="signin">
-          <button className='flex items-center gap-[5px] py-[5px] px-[10px] mt-[10px] bg-transparent border-blue-600 border-[1px] border-solid text-blue-600 text-[xs] font-semibold rounded-[3px] '> <AccountCircleIcon fontSize='small' /> SIGN IN </button>
-          </Link>
+          <button className='flex items-center gap-[5px] py-[5px] px-[10px] mt-[10px] bg-transparent border-blue-600 hover:border-blue-700 border-[1px] border-solid text-blue-600 hover:text-blue-700 text-[xs] font-semibold rounded-[3px] '> <AccountCircleIcon fontSize='small' /> SIGN IN </button>
         </div>
+          </Link>
 
         <div className='Hr  my-[15px] mx-0 border-[0.5px] border-solid border-[#eeeeee] dark:border-[#373737]  '></div>
-
+        </> 
+        }
         <div className="Title text-md font-semibold text-[#aaaaaa] mb-[10px] ">BEST OF OURTUBE</div>
 
         <div className="Item">
