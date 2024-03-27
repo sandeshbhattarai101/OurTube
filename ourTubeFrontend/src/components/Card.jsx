@@ -4,11 +4,13 @@ import { Link } from 'react-router-dom';
 import { format } from 'timeago.js';
 
 export default function Card({ type, video }) {
-  const [channel, setChannel] = useState();
+  const [channel, setChannel] = useState({});
 
   useEffect(() => {
     const fetchChannel = async()=>{
-      const res = await axios.get(`http://localhost:3000/api/users/find/${video.userId}`)
+      const res = await axios.get(`http://localhost:3000/api/users/find/${video.userId}`,{
+        withCredentials: true,
+      })
       setChannel(res.data)
     }
     fetchChannel()

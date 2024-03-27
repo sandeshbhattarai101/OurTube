@@ -1,16 +1,32 @@
-import React from 'react'
+import axios from 'axios'
+import React, { useEffect, useState } from 'react'
 
-export default function Comment() {
+export default function Comment({comment}) {
+  const [channel, setChannel] = useState({})
+
+  useEffect(() => {
+    const fetchComment = async() =>{
+
+      const res = await axios.get(`http://localhost:3000/api/users/find/${comment.data.userId}`,{
+        withCredentials: true,
+      })
+
+      setChannel(res.data)
+
+    }
+    fetchComment();
+  }, [comment.userId])
+  
   return (
     <>
     <div className="Container flex  gap-[10px] my-[30px] mx-0 ">
-    <img src="../../public/images/Avatar.png" alt="" className="Avatar h-[40px] w-[40px] rounded-[50%]" />
+    <img src={channel.img} alt="" className="Avatar h-[40px] w-[40px] rounded-[50%]" />
     <div className="Details flex flex-col gap-10 ">
-        <span className="Name text-[13px] font-medium ">Owl City
+        <span className="Name text-[13px] font-medium ">{channel.name}
         <span className="Date text-[12px] ml-[5px] font-normal  text-[#545454] dark:text-[#9e9e9e] ">1 day ago</span>
         </span>
-        <span className="Texttext-[14px] ">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quod ipsam quam voluptatibus necessitatibus? Exercitationem, aspernatur.
+        <span className="Text text-[14px] ">
+          {comment.desc}
         </span>
     </div>
     </div>

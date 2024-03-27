@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import ThumbUpOutlinedIcon from '@mui/icons-material/ThumbUpAltOutlined';
 import ThumbDownOutlinedIcon from '@mui/icons-material/ThumbDownOutlined';
 import ReplyOutlinedIcon from '@mui/icons-material/ReplyOutlined';
@@ -14,23 +14,25 @@ import axios from 'axios';
 import { dislike, fetchSuccess, like } from '../redux/videoSlice';
 import { format } from 'timeago.js';
 import { subscription } from '../redux/userSlice';
+import Recommendation from '../components/Recommendation';
 
 function Video() {
 
-  const {currentUser} = useSelector((state) => {state.user})
-  const {currentVideo} = useSelector((state) => {state.video})
+  const {currentUser}  = useSelector((state) => state.user); 
+  const {currentVideo} = useSelector((state) => state.video)
   const dispatch = useDispatch();
-
   const path = useLocation().pathname.split("/")[2] //taking second item i.e videoId
-
   const [channel, setChannel] = useState({})
 
   useEffect(() => {
     const fetchData = async() =>{
      try {
-      const videoRes = await axios.get(`http://localhost:3000/api/videos/find/${path}`)
-      const channelRes = await axios.get(`http://localhost:3000/api/users/find/${videoRes.data.userId}`)
-
+      const videoRes = await axios.get(`http://localhost:3000/api/videos/find/${path}`,{
+        withCredentials: true,
+      })
+      const channelRes = await axios.get(`http://localhost:3000/api/users/find/${videoRes.data.userId}`,{
+        withCredentials: true,
+      })
       setChannel(channelRes.data)
       dispatch(fetchSuccess(videoRes.data))
 
@@ -40,26 +42,34 @@ function Video() {
   }, [path, dispatch])
   
   const handleLike = async()=>{
-    await axios.put(`http://localhost:3000/api/users/like${currentVideo._id}`)
+   const res = await axios.put(`http://localhost:3000/api/users/like/${currentVideo._id}`,{
+      withCredentials: true,
+    })
     dispatch(like(currentUser._id))
   }
   const handleDislike = async()=>{
-    await axios.put(`http://localhost:3000/api/users/dislike${currentVideo._id}`)
+   const res = await axios.put(`http://localhost:3000/api/users/dislike/${currentVideo._id}`, {
+      withCredentials: true,
+    })
     dispatch(dislike(currentUser._id))
   }
 
   const handleSub = async()=>{
     currentUser.subscribedUsers.includes(channel._id) ?
-    await axios.put(`http://localhost:3000/api/users/unsub/${channel._id}`) :
-    await axios.put(`http://localhost:3000/api/users/sub/${channel._id}`)
+  await axios.put(`http://localhost:3000/api/users/unsub/${channel._id}`,{
+      withCredentials:true,
+    }) :
+    await axios.put(`http://localhost:3000/api/users/sub/${channel._id}`,{
+      withCredentials:true,
+    })
     dispatch(subscription(channel._id))
   }
   return (
     <>
-    <div className="Container flex gap-[24px] ">
+    { currentVideo && <div className="Container flex gap-[24px] ">
       <div className="Content flex-[5] ">
         <div className="VideoWrapper">
-       <video className='VideoFrame max-h-[720px] w-full object-cover ' src={currentVideo.videoUrl}/>
+       <video className='VideoFrame max-h-[720px] w-full object-cover ' src={currentVideo.VideoUrl} controls/> 
         </div>
         <div className="Title text-[18px] font-medium mt-5 mb-[10px] text-black dark:text-white ">{currentVideo.title}</div>
         <div className="Details flex items-center justify-between mb-5 ">
@@ -78,19 +88,19 @@ function Video() {
         </div>
           </div>
           <div onClick={handleLike} className='Buttons flex gap-[14px] text-[14px] text-[#545454] dark:text-[#9e9e9e]'>
-            <button className=' '>{currentVideo.likes?.includes(currentUser._id) ? (
+            <button className=' '>{currentVideo.likes?.includes(currentUser?._id) ? (
             <ThumbUpIcon/>
             ) : (
             <ThumbUpOutlinedIcon/>
             )}{" "}
             {currentVideo.likes?.length}</button>
 
-            <button onClick={handleDislike} className=' ' >{currentVideo.dislikes?.includes(currentUser._id) ?( 
+            <button onClick={handleDislike} className=' ' >{currentVideo.dislikes?.includes(currentUser?._id) ?( 
              <ThumbDownIcon/>
              ) : (
               <ThumbDownOutlinedIcon/>
               )}{" "}
-              Dislike</button>
+              {currentVideo.dislikes?.length}</button>
             <button className=' ' ><ReplyOutlinedIcon/>Share</button>
             <button className=' ' ><PlaylistAddOutlinedIcon/>Save</button>
           </div>
@@ -102,21 +112,10 @@ function Video() {
           </div>
         </div>
         <div className='Hr  my-[15px] mx-0 border-[0.5px] border-solid border-[#eeeeee] dark:border-[#373737]  '></div>
-        <Comments/>
+        <Comments videoId={currentVideo._id} />
       </div>
-      <div className="Recommendation flex-[2] ">
-        <Card type="sm" />
-        <Card type="sm" />
-        <Card type="sm" />
-        <Card type="sm" />
-        <Card type="sm" />
-        <Card type="sm" />
-        <Card type="sm" />
-        <Card type="sm" />
-        <Card type="sm" />
-         
-      </div>
-    </div>
+    <Recommendation tags={currentVideo.tags}/>
+    </div>}
     </>
   )
 }
