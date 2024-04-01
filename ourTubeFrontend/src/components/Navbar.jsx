@@ -2,39 +2,45 @@ import React, { useState } from 'react'
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import SearchIcon from '@mui/icons-material/Search';
 import VideoCallOutlinedIcon from '@mui/icons-material/VideoCallOutlined';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import {useSelector} from 'react-redux';
 import { useDispatch } from 'react-redux';
 import { logout } from '../redux/userSlice';
 import Upload from './Upload';
+import DropDownProfile from './DropDownProfile';
 
 
 function Navbar() {
 
+  const navigate = useNavigate()
+
  const dispatch = useDispatch();
 
+ const [openProfile, setOpenProfile] = useState(false);
  const [open, setOpen] = useState(false)
+ const [q, setQ] = useState("")
 
   const {currentUser} = useSelector((state) => state.user)
-
+ 
   const handleLogOut = ()=>{
     dispatch(logout());
+    navigate("/trends")
   }
 
   return (
     < >
     <div className="Container sticky top-0 bg-[#ffffff] dark:bg-[#202020] h-[56px] ">
       <div className="Wrapper flex justify-end items-center relative h-full py-0 px-[20px] ">
-        <div className="Search w-[50%] p-[5px] border-[2px] border-solid border-[#ccc] dark:border-[#606060] rounded-[5px] flex items-center justify-between absolute left-0 right-0 m-auto ">
-          <input className=' w-[94%] outline-none bg-transparent' type="text" placeholder='Search'/>
-          <SearchIcon/>
+        <div className="Search w-[50%] p-[5px] border-[2px] border-solid border-[#ccc] dark:border-[#606060] rounded-[5px] flex items-center justify-between absolute left-0 right-0 m-auto cursor-pointer ">
+          <input className=' w-[94%] outline-none bg-transparent' type="text" placeholder='Search' onChange={(e)=>setQ(e.target.value)}/>
+          <SearchIcon onClick={()=>navigate(`/search?q=${q}`)}/>
         </div>
        {currentUser ? (
         <>
         <button onClick={handleLogOut} className="flex items-center gap-[5px] py-[5px] px-[10px] mr-10  bg-transparent border-blue-600 border-[1px] hover:border-blue-700 border-solid text-blue-600 hover:text-blue-700 text-[xs] font-semibold rounded-[3px] '> <AccountCircleIcon fontSize='small'">Logout</button>
         <div className="User flex items-center gap-[10px] font-medium  ">
           <VideoCallOutlinedIcon onClick={()=> setOpen(true)} />
-          <img src={currentUser.img} alt='' className="Avatar w-8 h-8 rounded-[50%] bg-[#999] "/>
+          <img src={currentUser.img} alt=''  onClick={() => {setOpenProfile((prev) => !prev)}} className="Avatar w-8 h-8 rounded-[50%] bg-[#999] "/>
             {currentUser.name}
         </div>
 
@@ -47,6 +53,7 @@ function Navbar() {
       </div>
     </div>
     {open && <Upload setOpen={setOpen} />}
+    {openProfile && <DropDownProfile userId={currentUser._id || currentUser.others._id}/>}
     </>
   )
 }

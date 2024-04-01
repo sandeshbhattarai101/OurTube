@@ -6,7 +6,6 @@ import PlaylistAddOutlinedIcon from '@mui/icons-material/PlaylistAddOutlined';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import ThumbDownIcon from '@mui/icons-material/ThumbDown';
 import Comments from '../components/Comments';
-import Card from '../components/Card';
 import {useSelector} from 'react-redux';
 import { useDispatch } from 'react-redux';
 import { useLocation } from 'react-router-dom';
@@ -16,13 +15,15 @@ import { format } from 'timeago.js';
 import { subscription } from '../redux/userSlice';
 import Recommendation from '../components/Recommendation';
 
-function Video() {
 
+function Video() {
+  const tokenLocal = localStorage.getItem("token") //geting token from localStorage
   const {currentUser}  = useSelector((state) => state.user); 
   const {currentVideo} = useSelector((state) => state.video)
   const dispatch = useDispatch();
   const path = useLocation().pathname.split("/")[2] //taking second item i.e videoId
   const [channel, setChannel] = useState({})
+  
 
   useEffect(() => {
     const fetchData = async() =>{
@@ -40,26 +41,33 @@ function Video() {
     }
     fetchData();
   }, [path, dispatch])
+
+  //Axios Post request assumes that the second parameter is data and third parameter is config.
+
+//Axios Get request assumes that the second parameter is config while the data is appended in URL.
+
+// I was sending data in the url which should be as second parameter(For POST request).
   
   const handleLike = async()=>{
-   const res = await axios.put(`http://localhost:3000/api/users/like/${currentVideo._id}`,{
-      withCredentials: true,
-    })
-    dispatch(like(currentUser._id))
+   await axios.put(`http://localhost:3000/api/users/like/${currentVideo._id}`,{},{
+    withCredentials: true,
+   })
+   dispatch(like(currentUser._id))
   }
+
   const handleDislike = async()=>{
-   const res = await axios.put(`http://localhost:3000/api/users/dislike/${currentVideo._id}`, {
+   await axios.put(`http://localhost:3000/api/users/dislike/${currentVideo._id}`,{}, {
       withCredentials: true,
     })
     dispatch(dislike(currentUser._id))
   }
 
   const handleSub = async()=>{
-    currentUser.subscribedUsers.includes(channel._id) ?
-  await axios.put(`http://localhost:3000/api/users/unsub/${channel._id}`,{
+    currentUser?.subscribedUsers?.includes(channel?._id) ?
+  await axios.put(`http://localhost:3000/api/users/unsub/${channel._id}`,{},{
       withCredentials:true,
     }) :
-    await axios.put(`http://localhost:3000/api/users/sub/${channel._id}`,{
+    await axios.put(`http://localhost:3000/api/users/sub/${channel._id}`,{},{
       withCredentials:true,
     })
     dispatch(subscription(channel._id))
@@ -75,20 +83,20 @@ function Video() {
         <div className="Details flex items-center justify-between mb-5 ">
         <div className="Channel flex items-center justify-between">
           <div className="ChannelInfo flex gap-[10px] ">
-            <img src={channel.img} alt="" className="logo h-[40px] w-[40px] rounded-[50%]" />
+            <img src={channel?.img} alt="" className="logo h-[40px] w-[40px] rounded-[50%]" />
             <div className="ChannelDetail flex flex-col text-[#545454] dark:text-[#9e9e9e] ">
-            <span className="ChannelName font-medium">{channel.name}</span>
-            <span className="ChannelCounter font-normal text-sm w-32  ">{channel.subscribers} subscribers</span>
+            <span className="ChannelName font-medium">{channel?.name}</span>
+            <span className="ChannelCounter font-normal text-sm w-32  ">{channel?.subscribers} subscribers</span>
             </div>
-            <button onClick={handleSub} className="Subscribe text-[#e8e8e8] dark:text-[#3e3e3e] font-semibold bg-black dark:bg-white h-9 w-[90px] rounded-2xl">
-              {currentUser.subscribedUsers?.includes(channel._id) 
-              ? "SUBSCRIBED"
-              : "SUBSCRIBE"}
+            <button onClick={handleSub} className="Subscribe text-[#e8e8e8] dark:text-[#3e3e3e] font-semibold bg-black dark:bg-white h-9 w-[110px] rounded-2xl">
+              {currentUser?.subscribedUsers?.includes(channel._id) 
+              ? "Subscribed"
+              : "Subscribe"}
             </button>
         </div>
           </div>
           <div onClick={handleLike} className='Buttons flex gap-[14px] text-[14px] text-[#545454] dark:text-[#9e9e9e]'>
-            <button className=' '>{currentVideo.likes?.includes(currentUser?._id) ? (
+            <button >{currentVideo.likes?.includes(currentUser?._id) ? (
             <ThumbUpIcon/>
             ) : (
             <ThumbUpOutlinedIcon/>
@@ -101,8 +109,8 @@ function Video() {
               <ThumbDownOutlinedIcon/>
               )}{" "}
               {currentVideo.dislikes?.length}</button>
-            <button className=' ' ><ReplyOutlinedIcon/>Share</button>
-            <button className=' ' ><PlaylistAddOutlinedIcon/>Save</button>
+            <button  ><ReplyOutlinedIcon/>Share</button>
+            <button  ><PlaylistAddOutlinedIcon/>Save</button>
           </div>
         </div>
         <div className="ChanelViewDetail">

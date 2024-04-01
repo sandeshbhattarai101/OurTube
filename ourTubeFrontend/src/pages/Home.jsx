@@ -21,7 +21,7 @@ export default function Home({type}) {
   return (
     <>
     <div className="Container  flex justify-between flex-wrap ">
-       {videos.map((video) => (
+       {videos?.map((video) => (
          <Card key={video._id} video={video} />
        ))}
     </div>

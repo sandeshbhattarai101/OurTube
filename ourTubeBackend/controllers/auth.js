@@ -21,6 +21,7 @@ export const signup = async(req, res, next)=>{
  }
 }
 
+// We sent token too because axios is not working in some cases
 
 export const signin = async(req, res, next)=>{
 
@@ -61,13 +62,14 @@ export const googleAuth = async (req, res, next) => {
          fromGoogle: true,
        });
        const savedUser = await newUser.save();
+       const savedDoc = savedUser._doc
        const token = jwt.sign({ id: savedUser._id }, process.env.JWT);
        res
          .cookie("access_token", token, {
            httpOnly: true,
          })
          .status(200)
-         .json(savedUser._doc);
+         .json({savedDoc, token});
      }
    } catch (err) {
      next(err);

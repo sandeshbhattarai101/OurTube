@@ -6,7 +6,7 @@ export const updateUser = async (req, res, next)=>{
     if(req.params.id === req.user.id){
         try {
             const updatedUser = await User.findByIdAndUpdate(req.params.id, {
-                $set: req.body
+                $set: {...req.body, img: req.body.img }
             },{
                 new:true 
             })

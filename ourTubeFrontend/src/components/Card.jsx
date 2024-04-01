@@ -29,12 +29,12 @@ export default function Card({ type, video }) {
         <div className={`Details ${type !== "sm" && "mt-[16px]"} flex flex:[1] gap-3`}>
           <img
             className={`ChannelImage ${type === "sm" && "hidden"} w-9 h-9 rounded-[50%] bg-gray-500`}
-            src={channel.img}
+            src={channel?.img}
             alt="ChannelLogo"
           />
           <div className="Texts">
             <h1 className="Title text-4 font-medium text-black dark:text-white">{video.title}</h1>
-            <h2 className="ChannelName text-[14px] font-medium text-[#373737] dark:text-white my-[9px] mx-0">{channel.name}</h2>
+            <h2 className="ChannelName text-[14px] font-medium text-[#373737] dark:text-white my-[9px] mx-0">{channel?.name}</h2>
             <div className="Info text-[14px] text-[#373737] dark:text-white">{video.views} views {format(video.createdAt)}</div>
           </div>
         </div>

@@ -1,57 +1,57 @@
-import express from "express"
+import express from "express";
 import mongoose from "mongoose";
-import dotenv from "dotenv"
-import userRoutes from "./routes/users.js"
-import videoRoutes from "./routes/videos.js"
-import commentRoutes from "./routes/comments.js"
-import authRoutes from "./routes/auth.js"
+import dotenv from "dotenv";
+import userRoutes from "./routes/users.js";
+import videoRoutes from "./routes/videos.js";
+import commentRoutes from "./routes/comments.js";
+import authRoutes from "./routes/auth.js";
 import cookieParser from "cookie-parser";
-import cors from "cors"
+import cors from "cors";
 
-const app  = express()
-dotenv.config()
+const app = express();
+dotenv.config();
 
-const connect = async() =>{
-    try {
-        await mongoose.connect(process.env.MONGO)
-        console.log("Connected to Database")  
-    } catch{ ((err)=>{
-        throw err;
-    }) }
+const connect = async () => {
+  try {
+    await mongoose.connect(process.env.MONGO);
+    console.log("Connected to Database");
+  } catch (err) {
+    throw err;
+  }
 };
 
-//For CORS
-
+// CORS configuration
 const corsOptions = {
-    origin: "http://localhost:5173",
-    credentials: true
-  };
-  
-  app.use(cors(corsOptions));
+  origin: "http://localhost:5173",
+  credentials: true,
+};
+app.use(cors(corsOptions));
 
+// Cookie parser middleware
+app.use(cookieParser());
 
-app.use(cookieParser())
-app.use(express.json())
+// Body parser middleware
+app.use(express.json());
 
-app.use("/api/auth", authRoutes)
-app.use("/api/users", userRoutes)
-app.use("/api/videos", videoRoutes)
-app.use("/api/comments", commentRoutes)
+// Routes
+app.use("/api/auth", authRoutes);
+app.use("/api/users", userRoutes);
+app.use("/api/videos", videoRoutes);
+app.use("/api/comments", commentRoutes);
 
+// Error handling middleware
+app.use((err, req, res, next) => {
+  const status = err.status || 500;
+  const message = err.message || "Something went wrong!";
+  return res.status(status).json({
+    success: false,
+    status,
+    message,
+  });
+});
 
-
-// MIDDLEWARE FOR ERROR HANDLING
-app.use((err, req, res, next)=>{
-    const status = err.status || 500;
-    const message = err.message || "Something went wrong!";
-    return res.status(status).json({
-        success: false,
-        status,
-        message,
-    })
-})
-
-app.listen(3000,()=>{
-    connect()
-    console.log("Connected to Server");
-})
+const PORT = 3000;
+app.listen(PORT, () => {
+  connect();
+  console.log(`Server is running on port ${PORT}`);
+});

@@ -9,6 +9,8 @@ import Home from './pages/Home';
 import Video from './pages/Video';
 import SignIn from './pages/SignIn';
 import { useSelector } from "react-redux";
+import Search from './pages/Search';
+import Profile from './pages/Profile';
 
 function App() {
   const { currentUser } = useSelector((state) => state.user);
@@ -20,17 +22,22 @@ function App() {
           <div className='Main bg-[#eeeeee] dark:bg-[#181818] text-black dark:text-white flex-[7]' >
             <Navbar/>
             <div className='Wrapper px-[96px] py-[22px] '>
-           <Routes>
-            <Route path='/'>
-              <Route index element={<Home type="random" />} />
-              <Route path="trends" element={<Home type="trend"/>} />
-              <Route path="subscriptions" element={<Home type="sub"/>} />
-              <Route path="signin" element={currentUser ? <Home /> : <SignIn />} />
-              <Route path='video'>
-                <Route path=":id" element={<Video/>}/>
-              </Route>
-            </Route>
-           </Routes>
+            <Routes>
+                <Route path="/">
+                  <Route index element={<Home type="random" />} />
+                  <Route path="trends" element={<Home type="trend" />} />
+                  <Route path="subscriptions" element={<Home type="sub" />} />
+                  <Route path="search" element={<Search />} />
+                  <Route path="profile/:id" element={<Profile />} />
+                  <Route
+                    path="signin"
+                    element={currentUser ? <Home /> : <SignIn />}
+                  />
+                  <Route path="video">
+                    <Route path=":id" element={<Video />} />
+                  </Route>
+                </Route>
+              </Routes>
             </div>
           </div>
           </Router>
