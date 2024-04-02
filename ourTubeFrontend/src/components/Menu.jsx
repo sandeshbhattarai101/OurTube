@@ -44,16 +44,18 @@ function Menu() {
   return (
     <div className='Container sticky top-0 flex-[1] bg-white dark:bg-[#202020] text-[black] dark:text-white h-[100vh] text-[14px] '>
     <div className='Wrapper py-[18px] px-[26px]'>
-    <Link to='/video/test' >
+    <Link to='/' >
         <div className="logo flex items-center gap-[5px] font-bold mb-[25px]">
             <img className='h-[25px] aspect-square object-contain   ' src="../../public/images/youtubelogo.png" alt="" />
             OurTube
         </div>
     </Link>
+    <Link to='/'>
         <div className="Item">
           <HomeIcon/>
          Home 
         </div>
+    </Link>
 
         <Link to="trends">
         <div className="Item">

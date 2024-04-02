@@ -17,13 +17,13 @@ import Recommendation from '../components/Recommendation';
 
 
 function Video() {
-  const tokenLocal = localStorage.getItem("token") //geting token from localStorage
+//  const tokenLocal = localStorage.getItem("token") //geting token from localStorage
   const {currentUser}  = useSelector((state) => state.user); 
   const {currentVideo} = useSelector((state) => state.video)
   const dispatch = useDispatch();
   const path = useLocation().pathname.split("/")[2] //taking second item i.e videoId
   const [channel, setChannel] = useState({})
-  
+  console.log(currentUser);
 
   useEffect(() => {
     const fetchData = async() =>{
@@ -31,7 +31,7 @@ function Video() {
       const videoRes = await axios.get(`http://localhost:3000/api/videos/find/${path}`,{
         withCredentials: true,
       })
-      const channelRes = await axios.get(`http://localhost:3000/api/users/find/${videoRes.data.userId}`,{
+      const channelRes = await axios.get(`http://localhost:3000/api/users/find/${videoRes?.data.userId}`,{
         withCredentials: true,
       })
       setChannel(channelRes.data)
@@ -63,11 +63,11 @@ function Video() {
   }
 
   const handleSub = async()=>{
-    currentUser?.subscribedUsers?.includes(channel?._id) ?
-  await axios.put(`http://localhost:3000/api/users/unsub/${channel._id}`,{},{
+    currentUser?.subscribedUsers.includes(channel?._id) ?
+  await axios.put(`http://localhost:3000/api/users/unsub/${channel?._id}`,{},{
       withCredentials:true,
     }) :
-    await axios.put(`http://localhost:3000/api/users/sub/${channel._id}`,{},{
+    await axios.put(`http://localhost:3000/api/users/sub/${channel?._id}`,{},{
       withCredentials:true,
     })
     dispatch(subscription(channel._id))
@@ -89,7 +89,7 @@ function Video() {
             <span className="ChannelCounter font-normal text-sm w-32  ">{channel?.subscribers} subscribers</span>
             </div>
             <button onClick={handleSub} className="Subscribe text-[#e8e8e8] dark:text-[#3e3e3e] font-semibold bg-black dark:bg-white h-9 w-[110px] rounded-2xl">
-              {currentUser?.subscribedUsers?.includes(channel._id) 
+              {currentUser?.subscribedUsers?.includes(channel?._id) 
               ? "Subscribed"
               : "Subscribe"}
             </button>

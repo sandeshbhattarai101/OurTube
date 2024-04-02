@@ -20,6 +20,7 @@ export default function SignIn() {
       })
      if (res.status == 200){
        alert(res.data.message)
+       navigate("/signin")
       }
     } catch (err) {}
   }
@@ -50,7 +51,7 @@ export default function SignIn() {
       },{
         withCredentials: true,
       }).then((res)=>{
-         localStorage.setItem("token", res.data.token) // setting token to local to storage
+  //       localStorage.setItem("token", res.data.token) // setting token to local to storage
         dispatch(loginSuccess(res.data))
       })
     })
@@ -66,7 +67,7 @@ export default function SignIn() {
             <div className="Title text-[24px]">Sign in</div>
             <div className="SubTitle text-[20px] font-light ">to continue to OurTube</div>
             <input className=' border-solid outline-none border-[2px] border-[#dedede] dark:border-[#4e4e4e]  rounded-[3px] bg-transparent' type="text" placeholder='username'  onChange={e=>setName(e.target.value)} />
-            <input className='border-solid outline-none border-[2px] border-[#dedede] dark:border-[#4e4e4e]  rounded-[3px] bg-transparent' type="password" placeholder='password' value={password} onChange={e=>setPassword(e.target.value)} />
+            <input className='border-solid outline-none border-[2px] border-[#dedede] dark:border-[#4e4e4e]  rounded-[3px] bg-transparent' type="password" placeholder='password' onChange={e=>setPassword(e.target.value)} />
             <button onClick={handleLogin} className='rounded-[3px] border-none px-[20px] py-[10px]  bg-[#e5e5e5] hover:bg-[#d1d1d1] dark:bg-[#313131] hover:dark:bg-[#414141] text-[#6e6e6e] dark:text-[#bfbfbf] '>Sign in</button>
             <div className="Title text-[24px]">or</div>
             <button onClick={signInWithGoogle} className='rounded-[3px] border-none px-[20px] py-[10px]  bg-[#e5e5e5] hover:bg-[#d1d1d1] dark:bg-[#313131] hover:dark:bg-[#414141] text-[#6e6e6e] dark:text-[#bfbfbf]  '>Signin with Google</button>

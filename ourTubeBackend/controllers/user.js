@@ -1,22 +1,49 @@
 import { createError } from "../error.js"
 import User from "../models/User.js"
 import Video from "../models/Video.js"
+import fs from "fs"
 
 export const updateUser = async (req, res, next)=>{
-    if(req.params.id === req.user.id){
-        try {
-            const updatedUser = await User.findByIdAndUpdate(req.params.id, {
-                $set: {...req.body, img: req.body.img }
-            },{
-                new:true 
-            })
-            res.status(200).json(updatedUser)
-        } catch (err) {
-            next(err);         
+// IF THERE IS OLD IMAGE
+const {id} = req.params
+const oldData = await User.findById(id)
+const oldImage = oldData.img
+if(oldImage){
+const lengthToCut =  process.env.BACKEND_URL.lengthconst
+const finalFilePathAfterCut = oldImage.slice(lengthToCut)
+
+if(req.file && req.file.filename){
+    //REMOVE FILE FROM UPLOADS FOLDER
+    fs.unlink("./uploads/" + finalFilePathAfterCut,(err)=>{
+        if(err){
+            console.log("error deleting file",err)
+
+        }else{
+            console.log("file deleted successfully")
         }
-    }else{
-        return next(createError(403, "You can update only your account!"))
+    })
+}
+}
+ const file = req.file
+ let filePath;
+ if(file){
+            filePath = req.file.filename
+        }
+        
+if(req.params.id === req.user.id){
+    try {
+        const updatedUser = await User.findByIdAndUpdate(req.params.id, {
+            $set: {...req.body, img: process.env.BACKEND_URL + filePath }
+        },{
+            new:true 
+        })
+        res.status(200).json(updatedUser)
+    } catch (err) {
+        next(err);         
     }
+}else{
+    return next(createError(403, "You can update only your account!"))
+}
 }
 
 export const deleteUser = async (req, res,next)=>{
@@ -44,6 +71,7 @@ export const getUser = async (req, res,next)=>{
 }
 
 export const subscribe = async (req, res,next)=>{
+    if(req.params.id !== req.user.id){
         try {
              await User.findByIdAndUpdate(req.user.id,{
                 $push:{subscribedUsers: req.params.id}
@@ -51,10 +79,17 @@ export const subscribe = async (req, res,next)=>{
              await User.findByIdAndUpdate(req.params.id,{
                 $inc:{ subscribers: 1},
              })
-             res.status(200).json("Subscription successfull.")
+             res.status(200).json({
+                message: "Subscription Successfull"
+             })
         } catch (err) {
             next(err);         
         }
+    }else{
+        res.status(404).json({
+            message: "Cannot subscribe own Channel"
+        })
+    }
     }
 
 
@@ -67,7 +102,9 @@ export const unsubscribe = async (req, res,next)=>{
              await User.findByIdAndUpdate(req.params.id,{
                 $inc:{ subscribers: -1},
              })
-             res.status(200).json("Unsubscription successfull.")
+             res.status(200).json({
+                message: "Unsubscription Successfull"
+             })
         } catch (err) {
             next(err);         
         }

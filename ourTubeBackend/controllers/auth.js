@@ -34,12 +34,12 @@ export const signin = async(req, res, next)=>{
 
    const token = jwt.sign({id:user._id}, process.env.JWT)
 
-   //SEPERATING PASSWORD FROM USERDETAILS TO SEND
-   const {password, ...others} = user._doc
+  //  //SEPERATING PASSWORD FROM USERDETAILS TO SEND
+  //  const {password, ...others} = user._doc
 
    res.cookie("access_token", token,{
       httpOnly:true,
-   }).status(200).json({others, token});
+   }).status(200).json(user._doc);
  } catch (err) {
     next(err);
  }
@@ -62,16 +62,17 @@ export const googleAuth = async (req, res, next) => {
          fromGoogle: true,
        });
        const savedUser = await newUser.save();
-       const savedDoc = savedUser._doc
        const token = jwt.sign({ id: savedUser._id }, process.env.JWT);
        res
          .cookie("access_token", token, {
            httpOnly: true,
          })
          .status(200)
-         .json({savedDoc, token});
+         .json(savedUser._doc);
      }
    } catch (err) {
      next(err);
    }
  };
+
+ 

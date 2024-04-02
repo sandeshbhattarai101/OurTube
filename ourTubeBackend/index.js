@@ -33,6 +33,9 @@ app.use(cookieParser());
 // Body parser middleware
 app.use(express.json());
 
+// nodejs lai  file access garna dey vaneko hae yo code lay (browser ma/ frontend ma access garna payo uploads/ vitra ko file)
+app.use(express.static("./uploads/"))
+
 // Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);

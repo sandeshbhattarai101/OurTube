@@ -2,10 +2,13 @@ import express from "express";
 import { deleteUser, dislike, getUser, like, subscribe, unsubscribe, updateUser } from "../controllers/user.js";
 import { verifyToken } from "../verifyToken.js";
 
+import { multer, storage } from "../multerConfig.js";
+const upload = multer({storage : storage})
+
 const router = express.Router();
 
 //update user
-router.put("/:id", verifyToken, updateUser)
+router.put("/:id", verifyToken, upload.single('img'), updateUser)
 
 //delete user
 router.delete("/:id",verifyToken, deleteUser)

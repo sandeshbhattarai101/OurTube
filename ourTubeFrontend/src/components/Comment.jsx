@@ -1,5 +1,7 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
+import { format } from 'timeago.js';
+
 
 export default function Comment({comment}) {
   const [channel, setChannel] = useState({})
@@ -23,7 +25,7 @@ export default function Comment({comment}) {
     <img src={channel?.img} alt="" className="Avatar h-[40px] w-[40px] rounded-[50%]" />
     <div className="Details flex flex-col gap-10 ">
         <span className="Name text-[13px] font-medium ">{channel?.name}
-        <span className="Date text-[12px] ml-[5px] font-normal  text-[#545454] dark:text-[#9e9e9e] ">1 day ago</span>
+        <span className="Date text-[12px] ml-[5px] font-normal  text-[#545454] dark:text-[#9e9e9e] ">{format(comment.createdAt)}</span>
         </span>
         <span className="Text  text-[14px] ">
           {comment?.desc}
