@@ -15,7 +15,7 @@ export default function SignIn() {
 
   const handleSignUp = async(e)=>{
     try {
-      const res = await axios.post("http://localhost:3000/api/auth/signup", {name, email, password},{
+      const res = await axios.post("https://our-tube-api.vercel.app/api/auth/signup", {name, email, password},{
         withCredentials: true,
       })
      if (res.status == 200){
@@ -28,7 +28,7 @@ export default function SignIn() {
     e.preventDefault();
     dispatch(loginStart())
     try {
-      const res = await axios.post("http://localhost:3000/api/auth/signin", {name, password},{
+      const res = await axios.post("https://our-tube-api.vercel.app/api/auth/signin", {name, password},{
         withCredentials: true,
       })
       localStorage.setItem("token", res.data.token) // setting token to local to storage
@@ -44,7 +44,7 @@ export default function SignIn() {
     dispatch(loginStart());
     signInWithPopup(auth, provider)
     .then((result)=>{
-      axios.post("http://localhost:3000/api/auth/google",{
+      axios.post("https://our-tube-api.vercel.app/api/auth/google",{
         name: result.user.displayName,
         email: result.user.email,
         img: result.user.photoURL,

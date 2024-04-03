@@ -9,7 +9,7 @@ export default function Home({type}) {
 
   useEffect(() => {
     const fetchVideos = async()=>{
-      const res = await axios.get(`http://localhost:3000/api/videos/${type}`,{
+      const res = await axios.get(`https://our-tube-api.vercel.app/api/videos/${type}`,{
         withCredentials: true,
       })
       setVideos(res.data)
