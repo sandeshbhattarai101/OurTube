@@ -23,6 +23,7 @@ function Navbar() {
 
   const {currentUser} = useSelector((state) => state.user)
  
+  console.log(currentUser);
   const handleLogOut = async()=>{
     dispatch(logout());
     navigate("/signin")
@@ -41,8 +42,8 @@ function Navbar() {
         <button onClick={handleLogOut} className="flex items-center gap-[5px] py-[5px] px-[10px] mr-10  bg-transparent border-blue-600 border-[1px] hover:border-blue-700 border-solid text-blue-600 hover:text-blue-700 text-[xs] font-semibold rounded-[3px] '> <AccountCircleIcon fontSize='small'">Logout</button>
           <VideoCallOutlinedIcon onClick={()=> setOpen(true)} />
         <div  onClick={() => {setOpenProfile((prev) => !prev)}} className="User flex items-center gap-[10px] ml-5 font-medium  ">
-          <img src={currentUser.img} alt=''  className="Avatar w-8 h-8 rounded-[50%] bg-[#999] "/>
-            {currentUser.name}
+          <img src={currentUser?.img} alt=''  className="Avatar w-8 h-8 rounded-[50%] bg-[#999] "/>
+            {currentUser?.name}
         </div>
         </>
        ) : ( 
