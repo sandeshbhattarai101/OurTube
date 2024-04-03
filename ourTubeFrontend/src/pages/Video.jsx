@@ -28,10 +28,10 @@ function Video() {
   useEffect(() => {
     const fetchData = async() =>{
      try {
-      const videoRes = await axios.get(`https://our-tube-api.vercel.app/api/videos/find/${path}`,{
+      const videoRes = await axios.get(`http://localhost:3000/api/videos/find/${path}`,{
         withCredentials: true,
       })
-      const channelRes = await axios.get(`https://our-tube-api.vercel.app/api/users/find/${videoRes?.data.userId}`,{
+      const channelRes = await axios.get(`http://localhost:3000/api/users/find/${videoRes?.data.userId}`,{
         withCredentials: true,
       })
       setChannel(channelRes.data)
@@ -49,14 +49,14 @@ function Video() {
 // I was sending data in the url which should be as second parameter(For POST request).
   
   const handleLike = async()=>{
-   await axios.put(`https://our-tube-api.vercel.app/api/users/like/${currentVideo._id}`,{},{
+   await axios.put(`http://localhost:3000/api/users/like/${currentVideo._id}`,{},{
     withCredentials: true,
    })
    dispatch(like(currentUser._id))
   }
 
   const handleDislike = async()=>{
-   await axios.put(`https://our-tube-api.vercel.app/api/users/dislike/${currentVideo._id}`,{}, {
+   await axios.put(`http://localhost:3000/api/users/dislike/${currentVideo._id}`,{}, {
       withCredentials: true,
     })
     dispatch(dislike(currentUser._id))
@@ -64,10 +64,10 @@ function Video() {
 
   const handleSub = async()=>{
     currentUser?.subscribedUsers.includes(channel?._id) ?
-  await axios.put(`https://our-tube-api.vercel.app/api/users/unsub/${channel?._id}`,{},{
+  await axios.put(`http://localhost:3000/api/users/unsub/${channel?._id}`,{},{
       withCredentials:true,
     }) :
-    await axios.put(`https://our-tube-api.vercel.app/api/users/sub/${channel?._id}`,{},{
+    await axios.put(`http://localhost:3000/api/users/sub/${channel?._id}`,{},{
       withCredentials:true,
     })
     dispatch(subscription(channel._id))

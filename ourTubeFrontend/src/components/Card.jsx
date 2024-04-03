@@ -8,7 +8,7 @@ export default function Card({ type, video }) {
 
   useEffect(() => {
     const fetchChannel = async()=>{
-      const res = await axios.get(`https://our-tube-api.vercel.app/api/users/find/${video.userId}`,{
+      const res = await axios.get(`http://localhost:3000/api/users/find/${video.userId}`,{
         withCredentials: true,
       })
       setChannel(res.data)

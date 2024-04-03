@@ -37,9 +37,7 @@ export const signin = async(req, res, next)=>{
   //  //SEPERATING PASSWORD FROM USERDETAILS TO SEND
   //  const {password, ...others} = user._doc
 
-   res.cookie("access_token", token,{
-      httpOnly:true,
-   }).status(200).json(user._doc);
+   res.cookie("access_token", token).status(200).json(user._doc);
  } catch (err) {
     next(err);
  }
@@ -51,9 +49,7 @@ export const googleAuth = async (req, res, next) => {
      if (user) {
        const token = jwt.sign({ id: user._id }, process.env.JWT);
        res
-         .cookie("access_token", token, {
-           httpOnly: true,
-         })
+         .cookie("access_token", token)
          .status(200)
          .json(user._doc);
      } else {
@@ -64,9 +60,7 @@ export const googleAuth = async (req, res, next) => {
        const savedUser = await newUser.save();
        const token = jwt.sign({ id: savedUser._id }, process.env.JWT);
        res
-         .cookie("access_token", token, {
-           httpOnly: true,
-         })
+         .cookie("access_token", token)
          .status(200)
          .json(savedUser._doc);
      }

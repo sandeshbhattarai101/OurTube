@@ -12,7 +12,7 @@ export default function Comments({videoId}) {
   useEffect(() => {
     const fetchComments = async() =>{
       try {
-        const res = await axios.get(`https://our-tube-api.vercel.app/api/comments/${videoId}`,{
+        const res = await axios.get(`http://localhost:3000/api/comments/${videoId}`,{
           withCredentials: true,
         })
         setComments(res.data)
@@ -26,7 +26,7 @@ export default function Comments({videoId}) {
       e.preventDefault()
       try {
         // we have to use same name as model while sending data from form/input
-        await axios.post(`https://our-tube-api.vercel.app/api/comments/comment/${videoId}`,{desc},{
+        await axios.post(`http://localhost:3000/api/comments/comment/${videoId}`,{desc},{
           withCredentials: true,
         })
         setDesc('');

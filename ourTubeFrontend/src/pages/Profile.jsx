@@ -23,7 +23,7 @@ export default function Profile() {
       formData.append('email', email);
       formData.append('img', img); // Append the file object
 
-      const res = await axios.put(`https://our-tube-api.vercel.app/api/users/${params.id}`, formData, {
+      const res = await axios.put(`http://localhost:3000/api/users/${params.id}`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data', // Ensure proper content type for FormData
         },

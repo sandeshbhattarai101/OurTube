@@ -7,7 +7,7 @@ export default function Recommendation({tags}) {
 
     useEffect(() => {
       const fetchVideos = async ()=>{
-        const res = await axios.get(`https://our-tube-api.vercel.app/api/videos/tags?tags=${tags}`,{
+        const res = await axios.get(`http://localhost:3000/api/videos/tags?tags=${tags}`,{
           withCredentials: true,
         })
         setVideos(res.data);

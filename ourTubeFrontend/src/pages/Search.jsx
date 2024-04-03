@@ -10,7 +10,7 @@ export default function Search() {
     const [videos, setVideos] = useState([])
     useEffect(() => {
       const fetchVideos = async()=>{
-        const res = await axios.get(`https://our-tube-api.vercel.app/api/videos/search${query}`)
+        const res = await axios.get(`http://localhost:3000/api/videos/search${query}`)
         setVideos(res.data)
     }
     console.log(videos)
