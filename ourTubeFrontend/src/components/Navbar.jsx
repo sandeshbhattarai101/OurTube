@@ -23,7 +23,6 @@ function Navbar() {
 
   const {currentUser} = useSelector((state) => state.user)
  
-  console.log(currentUser);
   const handleLogOut = async()=>{
     dispatch(logout());
     navigate("/signin")
@@ -43,7 +42,7 @@ function Navbar() {
           <VideoCallOutlinedIcon onClick={()=> setOpen(true)} />
         <div  onClick={() => {setOpenProfile((prev) => !prev)}} className="User flex items-center gap-[10px] ml-5 font-medium  ">
           <img src={currentUser?.img} alt=''  className="Avatar w-8 h-8 rounded-[50%] bg-[#999] "/>
-            {currentUser?.name}
+            {currentUser.name}
         </div>
         </>
        ) : ( 

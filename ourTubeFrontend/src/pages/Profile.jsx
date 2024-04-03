@@ -8,8 +8,8 @@ import { loginSuccess } from '../redux/userSlice';
 export default function Profile() {
   const { currentUser } = useSelector((state) => state.user);
   const params = useParams();
-  const oname = currentUser.name || currentUser.others.name;
-  const oemail = currentUser.email || currentUser.others.email;
+  const oname = currentUser.name ;
+  const oemail = currentUser.email;
   const [name, setName] = useState(oname);
   const [email, setEmail] = useState(oemail);
   const [img, setImg] = useState(null); // Store the file object, not the file path
